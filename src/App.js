@@ -4,6 +4,7 @@ import Layout from "./components/layout/Layout";
 import AllQuotes from "./pages/AllQuotes";
 import NewQuote from "./pages/NewQuote";
 import QuoteDetail from "./pages/QuoteDetail";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -23,6 +24,12 @@ function App() {
 
         <Route path="/new-quote">
           <NewQuote />
+        </Route>
+
+        {/* redirect the user to a not found page when they try to go to a page that doesn't exist,
+        it is only considered when no other route matches */}
+        <Route path="*">
+          <NotFound />
         </Route>
       </Switch>
     </Layout>
