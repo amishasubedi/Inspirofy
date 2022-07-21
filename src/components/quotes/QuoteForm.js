@@ -24,39 +24,48 @@ const QuoteForm = (props) => {
 
   const finishEnteringHandler = () => {
     setIsEntering(false);
-  }
+  };
 
   const formFocusHandler = () => {
     setIsEntering(true);
-  }
+  };
 
   return (
     <Fragment>
       {/* prompt is used before navigating away from a page */}
-      <Prompt when = {isEntering} message = {(location) => 'Are you sure you want to leave? All your entered data will be lost'}/>
-    <Card>
-      <form onFocus = {} className={classes.form} onSubmit={submitFormHandler}>
-        {props.isLoading && (
-          <div className={classes.loading}>
-            <LoadingSpinner />
+      <Prompt
+        when={isEntering}
+        message={(location) =>
+          "Are you sure you want to leave? All your entered data will be lost"
+        }
+      />
+      <Card>
+        <form
+          onFocus={formFocusHandler}
+          className={classes.form}
+          onSubmit={submitFormHandler}
+        >
+          {props.isLoading && (
+            <div className={classes.loading}>
+              <LoadingSpinner />
+            </div>
+          )}
+
+          <div className={classes.control}>
+            <label htmlFor="author">Author</label>
+            <input type="text" id="author" ref={authorInputRef} />
           </div>
-        )}
-
-
-
-        <div className={classes.control}>
-          <label htmlFor="author">Author</label>
-          <input type="text" id="author" ref={authorInputRef} />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="text">Text</label>
-          <textarea id="text" rows="5" ref={textInputRef}></textarea>
-        </div>
-        <div className={classes.actions}>
-          <button onClick = {finishEnteringHandler} className="btn">Add Quote</button>
-        </div>
-      </form>
-    </Card>
+          <div className={classes.control}>
+            <label htmlFor="text">Text</label>
+            <textarea id="text" rows="5" ref={textInputRef}></textarea>
+          </div>
+          <div className={classes.actions}>
+            <button onClick={finishEnteringHandler} className="btn">
+              Add Quote
+            </button>
+          </div>
+        </form>
+      </Card>
     </Fragment>
   );
 };
