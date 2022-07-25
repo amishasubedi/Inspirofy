@@ -1,37 +1,49 @@
+import React, { Suspense } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-import Layout from "./components/layout/Layout";
 
-import AllQuotes from "./pages/AllQuotes";
-import NewQuote from "./pages/NewQuote";
-import QuoteDetail from "./pages/QuoteDetail";
-import NotFound from "./pages/NotFound";
+import Layout from "./components/layout/Layout";
+import LoadingSpinner from "./components/ui/LoadingSpinner";
+
+// lazy loadinggi
+const NewQuote = React.lazy(() => import("./pages/NewQuote"));
+const QuoteDetail = React.lazy(() => import("./pages/QuoteDetail"));
+const NotFound = React.lazy(() => import("./pages/NotFound"));
+const AllQuotes = React.lazy(() => import("./pages/AllQuotes"));
 
 function App() {
   return (
     <Layout>
-      <Switch>
-        <Route path="/" exact>
-          <Redirect to="/quotes" />
-        </Route>
+      <Suspense
+        fallback={
+          <div className="centered">
+            <LoadingSpinner />
+          </div>
+        }
+      >
+        <Switch>
+          <Route path="/" exact>
+            <Redirect to="/quotes" />
+          </Route>
 
-        <Route path="/quotes" exact>
-          <AllQuotes />
-        </Route>
+          <Route path="/quotes" exact>
+            <AllQuotes />
+          </Route>
 
-        <Route path="/quotes/:quoteId">
-          <QuoteDetail />
-        </Route>
+          <Route path="/quotes/:quoteId">
+            <QuoteDetail />
+          </Route>
 
-        <Route path="/new-quote">
-          <NewQuote />
-        </Route>
+          <Route path="/new-quote">
+            <NewQuote />
+          </Route>
 
-        {/* redirect the user to a not found page when they try to go to a page that doesn't exist,
+          {/* redirect the user to a not found page when they try to go to a page that doesn't exist,
         it is only considered when no other route matches */}
-        <Route path="*">
-          <NotFound />
-        </Route>
-      </Switch>
+          <Route path="*">
+            <NotFound />
+          </Route>
+        </Switch>
+      </Suspense>
     </Layout>
   );
 }
