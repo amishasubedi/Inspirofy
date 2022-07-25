@@ -7,20 +7,6 @@ import { getSingleQuote } from "../lib/api";
 import Comments from "../components/comments/Comments";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
 
-const DUMMY_QUOTES = [
-  {
-    id: "q1",
-    author: "Amisha",
-    text: "manche chinni agi badhni",
-  },
-
-  {
-    id: "q2",
-    author: "ams",
-    text: "react sikdai",
-  },
-];
-
 const QuoteDetail = () => {
   const match = useRouteMatch();
   const params = useParams();
@@ -31,12 +17,12 @@ const QuoteDetail = () => {
   const {
     sendRequest,
     status,
-    data: loadedQuotes,
+    data: loadedQuote,
     error,
   } = useHttp(getSingleQuote, true);
 
   useEffect(() => {
-    sendRequest();
+    sendRequest(quoteId);
   }, [sendRequest, quoteId]);
 
   // check for loading
@@ -50,33 +36,32 @@ const QuoteDetail = () => {
 
   // check for error
   if (error) {
-    <p className="centered">{error}</p>;
+    return <p className="centered">{error}</p>;
   }
 
   // if loaded quote is empty
-  if (!loadedQuotes.text) {
-    return <p>No Quote found</p>;
+  if (!loadedQuote.text) {
+    return <p>No quote found!</p>;
   }
 
   // identify quote
-  const quote = DUMMY_QUOTES.find((quote) => quote.id === params.quoteId);
+  //const quote = DUMMY_QUOTES.find((quote) => quote.id === params.quoteId);
 
   // check if quote is undefined
-  if (!quote) {
-    return <p>No quote found</p>;
-  }
+  // if (!quote) {
+  //   return <p>No quote found</p>;
+  // }
 
   return (
     <Fragment>
-      <HighlightedQuote text={quote.text} author={quote.author} />
-      <Route path={`${match.path}`} exact>
+      <HighlightedQuote text={loadedQuote.text} author={loadedQuote.author} />
+      <Route path={match.path} exact>
         <div className="centered">
           <Link className="btn--flat" to={`${match.url}/comments`}>
             Load Comments
           </Link>
         </div>
       </Route>
-      {/* <Route path={`/quotes/${params.quoteId}/comments`}> */}
       <Route path={`${match.path}/comments`}>
         <Comments />
       </Route>
